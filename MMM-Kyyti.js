@@ -26,11 +26,17 @@ Module.register('MMM-Kyyti', {
     httpRequest({url: env.loginURL, data: credentials, method: 'POST'}).then(() => {
       setInterval(() => {
         httpRequest({url: env.myOrdersURL}).then(({orders}) => {
-          httpRequest({url: `${env.activeRouteURL}/${orders[0].routeId}`}).then((route) => {
-            console.log('route tuli', route)
-            this.orderTime = route.departureTime.time;
+          console.log('orders', orders)
+          if (orders.length) {
+            httpRequest({url: `${env.activeRouteURL}/${orders[0].routeId}`}).then((route) => {
+              console.log('route tuli', route)
+              this.orderTime = route.departureTime.time;
+              this.updateDom(1000);
+            });
+          } else {
+            this.orderTime = null;
             this.updateDom(1000);
-          });
+          }
         });
       }, 5000);
     });
