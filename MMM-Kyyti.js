@@ -23,10 +23,10 @@ Module.register('MMM-Kyyti', {
     return [this.file('./credentials.js'), this.file('./env.js'), 'moment.js'];
   },
   start: function() {
-    httpRequest({url: env.loginURL, data: credentials, method: 'POST'}).then((res) => {
+    httpRequest({url: env.loginURL, data: credentials, method: 'POST'}).then(() => {
       setInterval(() => {
-        httpRequest({url: env.myOrdersURL}).then((mitas) => {
-          httpRequest({url: `${env.activeRouteURL}/${mitas.orders[0].routeId}`}).then((route) => {
+        httpRequest({url: env.myOrdersURL}).then(({orders}) => {
+          httpRequest({url: `${env.activeRouteURL}/${orders[0].routeId}`}).then((route) => {
             console.log('route tuli', route)
             this.orderTime = route.departureTime.time;
             this.updateDom(1000);
