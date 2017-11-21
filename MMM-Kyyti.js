@@ -23,13 +23,12 @@ Module.register('MMM-Kyyti', {
     return [this.file('./credentials.js'), this.file('./env.js')];
   },
   start: function() {
-    var self = this;
-    httpRequest({url: env.loginURL, data: credentials, method: 'POST'}).then(function(res) {
-      httpRequest({url: env.myOrdersURL}).then(function(mitas) {
-        httpRequest({url: `${env.activeRouteURL}/${mitas.orders[0].routeId}`}).then(function(route) {
+    httpRequest({url: env.loginURL, data: credentials, method: 'POST'}).then((res) => {
+      httpRequest({url: env.myOrdersURL}).then((mitas) => {
+        httpRequest({url: `${env.activeRouteURL}/${mitas.orders[0].routeId}`}).then((route) => {
           console.log('route tuli', route.departureTime.time)
-          self.orderTime = route.departureTime.time;
-          self.updateDom(1000);
+          this.orderTime = route.departureTime.time;
+          this.updateDom(1000);
         })
       })
     });
