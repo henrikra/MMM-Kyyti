@@ -22,21 +22,27 @@ Module.register('MMM-Kyyti', {
   getScripts: function() {
     return [this.file('./credentials.js'), this.file('./env.js'), 'moment.js'];
   },
+
+  checkForOrders: function() {
+    httpRequest({url: env.myOrdersURL}).then(({orders}) => {
+      if (orders.length) {
+        httpRequest({url: `${env.activeRouteURL}/${orders[0].routeId}`}).then((route) => {
+          this.orderTime = route.departureTime.time;
+          this.updateDom(1000);
+        });
+      } else {
+        this.orderTime = null;
+        this.updateDom(1000);
+      }
+    });
+  },
+  
   start: function() {
     httpRequest({url: env.loginURL, data: credentials, method: 'POST'}).then(() => {
+      this.checkForOrders();
       setInterval(() => {
-        httpRequest({url: env.myOrdersURL}).then(({orders}) => {
-          if (orders.length) {
-            httpRequest({url: `${env.activeRouteURL}/${orders[0].routeId}`}).then((route) => {
-              this.orderTime = route.departureTime.time;
-              this.updateDom(1000);
-            });
-          } else {
-            this.orderTime = null;
-            this.updateDom(1000);
-          }
-        });
-      }, 5000);
+        this.checkForOrders();
+      }, 30000);
     });
   },
   getDom: function() {
