@@ -37,7 +37,7 @@ Module.register('MMM-Kyyti', {
   },
   getDom: function() {
     return document.createTextNode(
-      this.orderTime ? moment(this.orderTime).format('LT') : 'Hello World'
+      this.orderTime ? 'Your Kyyti arrives at: ' + moment(this.orderTime).format('LT') : '\xa0'
     );
   }
 })
