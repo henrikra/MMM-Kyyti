@@ -20,7 +20,7 @@ const httpRequest = ({method = 'GET', url, data}) => {
 
 Module.register('MMM-Kyyti', {
   getScripts: function() {
-    return [this.file('./credentials.js'), this.file('./env.js')];
+    return [this.file('./credentials.js'), this.file('./env.js'), 'moment.js'];
   },
   start: function() {
     httpRequest({url: env.loginURL, data: credentials, method: 'POST'}).then((res) => {
@@ -34,6 +34,8 @@ Module.register('MMM-Kyyti', {
     });
   },
   getDom: function() {
-    return document.createTextNode(this.orderTime ? this.orderTime : "Hello World");
+    return document.createTextNode(
+      this.orderTime ? moment(this.orderTime).format('LT') : 'Hello World',
+    );
   }
 })
