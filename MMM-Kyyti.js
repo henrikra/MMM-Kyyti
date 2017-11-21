@@ -1,5 +1,5 @@
 /* eslint-disable */
-const httpRequest = ({method = 'GET', url, data, callback}) => {
+const httpRequest = ({method = 'GET', url, data}) => {
   return new Promise((resolve, reject) => {
     const httpRequest = new XMLHttpRequest();
     httpRequest.onload = () => resolve(JSON.parse(httpRequest.responseText));
