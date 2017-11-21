@@ -22,17 +22,19 @@ Module.register('MMM-Kyyti', {
   getScripts: function() {
     return [this.file('./credentials.js'), this.file('./env.js')];
   },
-  start: () => {
-    httpRequest({url: env.loginURL, data: credentials, method: 'POST'}).then(res => {
-      httpRequest({url: env.myOrdersURL}).then(mitas => {
-        console.log('orderdiiiiit', mitas.orders[0])
-        httpRequest({url: `${env.activeRouteURL}/${mitas.orders[0].routeId}`}).then(route => {
+  start: function() {
+    var self = this;
+    httpRequest({url: env.loginURL, data: credentials, method: 'POST'}).then(function(res) {
+      httpRequest({url: env.myOrdersURL}).then(function(mitas) {
+        httpRequest({url: `${env.activeRouteURL}/${mitas.orders[0].routeId}`}).then(function(route) {
           console.log('route tuli', route.departureTime.time)
+          self.orderTime = route.departureTime.time;
+          self.updateDom(1000);
         })
       })
     });
   },
-  getDom: () => {
-    return document.createTextNode("Hello World");
+  getDom: function() {
+    return document.createTextNode(this.orderTime ? this.orderTime : "Hello World");
   }
 })
