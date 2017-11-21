@@ -24,18 +24,20 @@ Module.register('MMM-Kyyti', {
   },
   start: function() {
     httpRequest({url: env.loginURL, data: credentials, method: 'POST'}).then((res) => {
-      httpRequest({url: env.myOrdersURL}).then((mitas) => {
-        httpRequest({url: `${env.activeRouteURL}/${mitas.orders[0].routeId}`}).then((route) => {
-          console.log('route tuli', route.departureTime.time)
-          this.orderTime = route.departureTime.time;
-          this.updateDom(1000);
-        })
-      })
+      setInterval(() => {
+        httpRequest({url: env.myOrdersURL}).then((mitas) => {
+          httpRequest({url: `${env.activeRouteURL}/${mitas.orders[0].routeId}`}).then((route) => {
+            console.log('route tuli', route)
+            this.orderTime = route.departureTime.time;
+            this.updateDom(1000);
+          });
+        });
+      }, 5000);
     });
   },
   getDom: function() {
     return document.createTextNode(
-      this.orderTime ? moment(this.orderTime).format('LT') : 'Hello World',
+      this.orderTime ? moment(this.orderTime).format('LT') : 'Hello World'
     );
   }
 })
