@@ -45,6 +45,7 @@ Module.register('MMM-Kyyti', {
       }, 30000);
     });
   },
+
   getDom: function() {
     return document.createTextNode(
       this.orderTime ? 'Your Kyyti arrives at: ' + moment(this.orderTime).format('LT') : '\xa0'
