@@ -46,9 +46,18 @@ Module.register('MMM-Kyyti', {
     });
   },
 
+  formatMessage: function() {
+    if (moment().diff(this.orderTime) >= 0) {
+      return 'Your Kyyti arrives at: ' + moment(this.orderTime).format('LT');
+    }
+    else {
+      return 'Upcoming Kyyti: ' + moment(this.orderTime).format('LLL');
+    }
+  },
+
   getDom: function() {
     return document.createTextNode(
-      this.orderTime ? 'Your Kyyti arrives at: ' + moment(this.orderTime).format('LT') : '\xa0'
+      this.orderTime ? this.formatMessage() : '\xa0'
     );
   }
 })
