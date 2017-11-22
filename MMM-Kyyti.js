@@ -27,17 +27,17 @@ Module.register('MMM-Kyyti', {
     httpRequest({url: env.myOrdersURL}).then(({orders}) => {
       if (orders.length) {
         httpRequest({url: `${env.activeRouteURL}/${orders[0].routeId}`}).then((route) => {
-          this.orderTime = route.departureTime.time;
-          this.updateDom(1000);
+          this.setState({orderTime: route.departureTime.time}, 1000);
         });
       } else {
-        this.orderTime = null;
-        this.updateDom(1000);
+        this.setState({orderTime: null}, 1000);
       }
     });
   },
   
   start: function() {
+    this.state = {};
+
     httpRequest({url: env.loginURL, data: credentials, method: 'POST'}).then(() => {
       this.checkForOrders();
       setInterval(() => {
@@ -46,18 +46,23 @@ Module.register('MMM-Kyyti', {
     });
   },
 
+  setState: function(newData, animationSpeed) {
+    this.state = Object.assign({}, this.state, newData);
+    this.updateDom(animationSpeed);
+  },
+
   formatMessage: function() {
-    if (moment(this.orderTime).isSame(moment(), 'day')) {
-      return 'Your Kyyti arrives at: ' + moment(this.orderTime).format('LT');
+    if (moment(this.state.orderTime).isSame(moment(), 'day')) {
+      return 'Your Kyyti arrives at: ' + moment(this.state.orderTime).format('LT');
     }
     else {
-      return 'Upcoming Kyyti: ' + moment(this.orderTime).format('LLL');
+      return 'Upcoming Kyyti: ' + moment(this.state.orderTime).format('LLL');
     }
   },
 
   getDom: function() {
     return document.createTextNode(
-      this.orderTime ? this.formatMessage() : '\xa0'
+      this.state.orderTime ? this.formatMessage() : '\xa0'
     );
   }
 })
