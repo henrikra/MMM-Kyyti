@@ -47,7 +47,7 @@ Module.register('MMM-Kyyti', {
   },
 
   formatMessage: function() {
-    if (moment().diff(this.orderTime) >= 0) {
+    if (moment(this.orderTime).isSame(moment(), 'day')) {
       return 'Your Kyyti arrives at: ' + moment(this.orderTime).format('LT');
     }
     else {
