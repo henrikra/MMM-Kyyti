@@ -45,7 +45,7 @@ Module.register('MMM-Kyyti', {
       if (orders.length) {
         httpRequest({url: `${env.activeRouteURL}/${orders[0].routeId}`}).then((route) => {
           this.setState({
-            orderTime: route.departureTime.time,
+            pickupETA: route.departureTime.time,
             pickupLocation: route.legs[0].places[0].location,
           });
         });
@@ -54,7 +54,7 @@ Module.register('MMM-Kyyti', {
             this.setState({carLocation: products[0].location});
           })
       } else {
-        this.setState({orderTime: null, pickupLocation: null, carLocation: null}, 1000);
+        this.setState({pickupETA: null, pickupLocation: null, carLocation: null}, 1000);
       }
     });
   },
@@ -76,11 +76,11 @@ Module.register('MMM-Kyyti', {
   },
 
   formatMessage: function() {
-    if (moment(this.state.orderTime).isSame(moment(), 'day')) {
-      return 'Your Kyyti arrives at: ' + moment(this.state.orderTime).format('LT');
+    if (moment(this.state.pickupETA).isSame(moment(), 'day')) {
+      return 'Your Kyyti arrives at: ' + moment(this.state.pickupETA).format('LT');
     }
     else {
-      return 'Upcoming Kyyti: ' + moment(this.state.orderTime).format('LLL');
+      return 'Upcoming Kyyti: ' + moment(this.state.pickupETA).format('LLL');
     }
   },
 
@@ -90,12 +90,12 @@ Module.register('MMM-Kyyti', {
   },
 
   getDom: function() {
-    const { orderTime, pickupLocation, carLocation } = this.state;
+    const { pickupETA, pickupLocation, carLocation } = this.state;
 
     const wrapper = document.createElement('div');
     const dateText = document.createElement('div');
     dateText.classList.add('bright');
-    dateText.innerHTML = orderTime ? this.formatMessage() : '\xa0';
+    dateText.innerHTML = pickupETA ? this.formatMessage() : '\xa0';
 
     const distanceText = document.createElement('div');
     distanceText.classList.add('small');
