@@ -86,7 +86,7 @@ Module.register('MMM-Kyyti', {
 
   formatCarDistance: function() {
     const { pickupLocation, carLocation } = this.state;
-    return `${calcCrow(pickupLocation, carLocation)} km away from pickup location`
+    return `${calcCrow(pickupLocation, carLocation)} km to pickup location`
   },
 
   getDom: function() {
@@ -96,6 +96,7 @@ Module.register('MMM-Kyyti', {
     const dateText = document.createTextNode(orderTime ? this.formatMessage() : '\xa0');
     const distanceText = document.createElement('div');
     distanceText.innerHTML = carLocation && pickupLocation ? this.formatCarDistance() : '\xa0';
+    distanceText.classList.add('small');
     wrapper.appendChild(dateText);
     wrapper.appendChild(distanceText);
     return wrapper;
