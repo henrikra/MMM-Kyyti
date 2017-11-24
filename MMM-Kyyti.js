@@ -47,7 +47,7 @@ Module.register('MMM-Kyyti', {
           this.setState({
             orderTime: route.departureTime.time,
             pickupLocation: route.legs[0].places[0].location,
-          }, 1000);
+          });
         });
         httpRequest({url: `${env.baseURL}orders/v1/orders/${orders[0].id}/details/realtime`})
           .then(({products}) => {
