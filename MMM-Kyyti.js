@@ -93,7 +93,9 @@ Module.register('MMM-Kyyti', {
     const { orderTime, pickupLocation, carLocation } = this.state;
 
     const wrapper = document.createElement('div');
-    const dateText = document.createTextNode(orderTime ? this.formatMessage() : '\xa0');
+    const dateText = document.createElement('div');
+    dateText.innerHTML = orderTime ? this.formatMessage() : '\xa0';
+    dateText.classList.add('bright');
     const distanceText = document.createElement('div');
     distanceText.innerHTML = carLocation && pickupLocation ? this.formatCarDistance() : '\xa0';
     distanceText.classList.add('small');
