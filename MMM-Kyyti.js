@@ -8,7 +8,7 @@ const tryParseJSON = data => {
 }
 
 const toRad = (value) => value * Math.PI / 180;
-function calcCrow(locationA, locationB) {
+function calculateStraightDistance(locationA, locationB) {
   const R = 6371;
   const dLat = toRad(locationB.lat - locationA.lat);
   const dLon = toRad(locationB.lon - locationA.lon);
@@ -86,7 +86,7 @@ Module.register('MMM-Kyyti', {
 
   formatCarDistance: function() {
     const { pickupLocation, carLocation } = this.state;
-    return `${calcCrow(pickupLocation, carLocation)} km to pickup location`
+    return `${calculateStraightDistance(pickupLocation, carLocation)} km to pickup location`
   },
 
   getDom: function() {
@@ -100,7 +100,7 @@ Module.register('MMM-Kyyti', {
     const distanceText = document.createElement('div');
     distanceText.innerHTML = carLocation && pickupLocation ? this.formatCarDistance() : '\xa0';
     distanceText.classList.add('small');
-    
+
     wrapper.appendChild(dateText);
     wrapper.appendChild(distanceText);
     return wrapper;
