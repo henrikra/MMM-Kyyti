@@ -93,15 +93,15 @@ Module.register('MMM-Kyyti', {
     const { pickupETA, pickupLocation, carLocation } = this.state;
 
     const wrapper = document.createElement('div');
-    const dateText = document.createElement('div');
-    dateText.classList.add('bright');
-    dateText.innerHTML = pickupETA ? this.formatMessage() : '\xa0';
+    const pickupETAText = document.createElement('div');
+    pickupETAText.classList.add('bright');
+    pickupETAText.innerHTML = pickupETA ? this.formatMessage() : '\xa0';
 
     const distanceText = document.createElement('div');
     distanceText.classList.add('small');
     distanceText.innerHTML = carLocation && pickupLocation ? this.formatCarDistance() : '\xa0';
 
-    wrapper.appendChild(dateText);
+    wrapper.appendChild(pickupETAText);
     wrapper.appendChild(distanceText);
     return wrapper;
   }
