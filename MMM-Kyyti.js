@@ -94,12 +94,12 @@ Module.register('MMM-Kyyti', {
 
     const wrapper = document.createElement('div');
     const dateText = document.createElement('div');
-    dateText.innerHTML = orderTime ? this.formatMessage() : '\xa0';
     dateText.classList.add('bright');
+    dateText.innerHTML = orderTime ? this.formatMessage() : '\xa0';
 
     const distanceText = document.createElement('div');
-    distanceText.innerHTML = carLocation && pickupLocation ? this.formatCarDistance() : '\xa0';
     distanceText.classList.add('small');
+    distanceText.innerHTML = carLocation && pickupLocation ? this.formatCarDistance() : '\xa0';
 
     wrapper.appendChild(dateText);
     wrapper.appendChild(distanceText);
