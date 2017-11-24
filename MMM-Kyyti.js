@@ -41,9 +41,9 @@ Module.register('MMM-Kyyti', {
   },
 
   checkForOrders: function() {
-    httpRequest({url: env.myOrdersURL}).then(({orders}) => {
+    httpRequest({url: `${env.baseURL}orders/v1/orders?user=me&onlyActive=true&limit=1`}).then(({orders}) => {
       if (orders.length) {
-        httpRequest({url: `${env.activeRouteURL}/${orders[0].routeId}`}).then((route) => {
+        httpRequest({url: `${env.baseURL}routestore/v1/routes/${orders[0].routeId}`}).then((route) => {
           this.setState({
             pickupETA: route.departureTime.time,
             pickupLocation: route.legs[0].places[0].location,
@@ -62,7 +62,7 @@ Module.register('MMM-Kyyti', {
   start: function() {
     this.state = {};
 
-    httpRequest({url: env.loginURL, data: credentials, method: 'POST'}).then(() => {
+    httpRequest({url: `${env.baseURL}auth/v1/login`, data: credentials, method: 'POST'}).then(() => {
       this.checkForOrders();
       setInterval(() => {
         this.checkForOrders();
