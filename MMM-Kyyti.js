@@ -12,8 +12,8 @@ function calcCrow(locationA, locationB) {
   const R = 6371;
   const dLat = toRad(locationB.lat - locationA.lat);
   const dLon = toRad(locationB.lon - locationA.lon);
-  var lat1 = toRad(locationA.lat);
-  var lat2 = toRad(locationB.lat);
+  const lat1 = toRad(locationA.lat);
+  const lat2 = toRad(locationB.lat);
 
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
