@@ -7,6 +7,23 @@ const tryParseJSON = data => {
   }
 }
 
+const toRad = (value) => value * Math.PI / 180;
+function calcCrow(locationA, locationB) {
+  const R = 6371;
+  const dLat = toRad(locationB.lat - locationA.lat);
+  const dLon = toRad(locationB.lon - locationA.lon);
+  var lat1 = toRad(locationA.lat);
+  var lat2 = toRad(locationB.lat);
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const d = R * c;
+  return d.toFixed(2);
+}
+
+
 const httpRequest = ({method = 'GET', url, data}) => {
   return new Promise((resolve, reject) => {
     const httpRequest = new XMLHttpRequest();
@@ -27,10 +44,17 @@ Module.register('MMM-Kyyti', {
     httpRequest({url: env.myOrdersURL}).then(({orders}) => {
       if (orders.length) {
         httpRequest({url: `${env.activeRouteURL}/${orders[0].routeId}`}).then((route) => {
-          this.setState({orderTime: route.departureTime.time}, 1000);
+          this.setState({
+            orderTime: route.departureTime.time,
+            pickupLocation: route.legs[0].places[0].location,
+          }, 1000);
         });
+        httpRequest({url: `${env.baseURL}orders/v1/orders/${orders[0].id}/details/realtime`})
+          .then(({products}) => {
+            this.setState({carLocation: products[0].location});
+          })
       } else {
-        this.setState({orderTime: null}, 1000);
+        this.setState({orderTime: null, pickupLocation: null, carLocation: null}, 1000);
       }
     });
   },
@@ -60,9 +84,20 @@ Module.register('MMM-Kyyti', {
     }
   },
 
+  formatCarDistance: function() {
+    const { pickupLocation, carLocation } = this.state;
+    return `${calcCrow(pickupLocation, carLocation)} km away from pickup location`
+  },
+
   getDom: function() {
-    return document.createTextNode(
-      this.state.orderTime ? this.formatMessage() : '\xa0'
-    );
+    const { orderTime, pickupLocation, carLocation } = this.state;
+
+    const wrapper = document.createElement('div');
+    const dateText = document.createTextNode(orderTime ? this.formatMessage() : '\xa0');
+    const distanceText = document.createElement('div');
+    distanceText.innerHTML = carLocation && pickupLocation ? this.formatCarDistance() : '\xa0';
+    wrapper.appendChild(dateText);
+    wrapper.appendChild(distanceText);
+    return wrapper;
   }
 })
